@@ -125,12 +125,12 @@ export const HeartQrCode: React.FC<HeartQrCodeProps> = ({
 
       ctx.fillStyle = '#6E535B';
       ctx.font = '400 20px sans-serif';
-      ctx.fillText('Scan via Weddmate · Private Opt-In Wedding Community', 450, 1004);
+      ctx.fillText('Scan via Saathiya · Private Opt-In Wedding Community', 450, 1004);
 
       const pngUrl = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = pngUrl;
-      a.download = `weddmate-heart-qr-${qrToken}.png`;
+      a.download = `saathiya-heart-qr-${qrToken}.png`;
       a.click();
       URL.revokeObjectURL(url);
     };
