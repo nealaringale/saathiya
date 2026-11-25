@@ -60,7 +60,7 @@ export interface TranslationBundle {
 }
 
 const EN: TranslationBundle = {
-  brand: 'Weddmate',
+  brand: 'Saathiya',
   navHome: 'Home',
   navDiscover: 'Discover',
   navMatches: 'Matches',
