@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#6B1D2F] text-[#FAF6F0] text-sm font-medium hover:bg-[#541524] transition-colors cursor-pointer"
             >
               <RotateCcw className="w-4 h-4" />
-              Reload Weddmate
+              Reload Saathiya
             </button>
           </div>
         </div>
