@@ -4,7 +4,7 @@ export const DEFAULT_WEDDING_ID = 'royal_udaipur_2026';
 
 export const SEED_WEDDING_EVENT: Omit<WeddingEvent, 'createdAt' | 'updatedAt'> = {
   id: DEFAULT_WEDDING_ID,
-  plannerUid: 'weddmate_host_udaipur',
+  plannerUid: 'saathiya_host_udaipur',
   weddingName: 'Royal Udaipur Winter Celebration',
   brideName: 'Kiara',
   groomName: 'Aarav',
