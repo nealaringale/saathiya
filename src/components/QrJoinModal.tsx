@@ -144,7 +144,7 @@ export const QrJoinModal: React.FC<QrJoinModalProps> = ({
                 Voluntarily opt in to Wedding Matchmaking
               </div>
               <div className="text-[#6E535B] dark:text-[#C7B3B8] mt-0.5">
-                Leave unchecked if you only want to view &amp; share Weddmate Memories and Reels. You
+                Leave unchecked if you only want to view &amp; share Saathiya Memories and Reels. You
                 can change this anytime in Profile.
               </div>
             </div>

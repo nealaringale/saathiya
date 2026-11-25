@@ -1,33 +1,43 @@
-name: Build Saathiya Android APK
+name: Build Saathiya Android APK and AAB
 
 on:
   push:
     branches:
       - main
     paths:
+      - ".github/workflows/android-apk.yml"
+      - ".gitignore"
+      - "README.md"
       - "app/**"
       - "src/**"
       - "package.json"
       - "package-lock.json"
+      - "index.html"
+      - "metadata.json"
       - "vite.config.ts"
       - "firebase-applet-config.json"
+      - "firebase.json"
+      - "firestore.rules"
+      - "DRAFT_firestore.rules"
+      - "firestore.rules.test.js"
+      - "security_spec.md"
       - "gradle/**"
+      - "gradle.properties"
       - "*.gradle.kts"
-      - ".github/workflows/android-apk.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: saathiya-apk-${{ github.ref }}
+  group: saathiya-android-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-apk:
-    name: Build web app and Android APK
+  build:
+    name: Validate web and Firestore rules, then build Android
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Check out source
@@ -42,6 +52,21 @@ jobs:
       - name: Install web dependencies
         run: npm ci
 
+      - name: Set up Java 21 for Firebase Emulator
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Type-check the web app
+        run: npm run lint
+
+      - name: Lint Firestore rules
+        run: npm run lint:rules
+
+      - name: Run Firestore Emulator security tests
+        run: npm run test:rules
+
       - name: Build React web app
         run: npm run build
 
@@ -54,7 +79,7 @@ jobs:
           cp -R dist/. app/src/main/assets/
           test -f app/src/main/assets/index.html
 
-      - name: Set up JDK 17
+      - name: Set up Java 17 for Android Gradle Plugin
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -76,32 +101,72 @@ jobs:
       - name: Create the debug signing key
         shell: bash
         run: |
-          if [ ! -f debug.keystore ]; then
-            keytool -genkeypair -v \
-              -keystore debug.keystore \
-              -storepass android \
-              -alias androiddebugkey \
-              -keypass android \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000 \
-              -dname "CN=Android Debug,O=Android,C=US"
+          keytool -genkeypair -v \
+            -keystore debug.keystore \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -noprompt
+
+      - name: Configure optional Android release signing
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [[ -z "$ANDROID_KEYSTORE_BASE64" ]]; then
+            echo "No upload keystore configured; release APK/AAB will be unsigned." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
 
-      - name: Build debug APK
-        run: gradle --no-daemon --stacktrace :app:assembleDebug
+          : "${ANDROID_KEYSTORE_PASSWORD:?Set ANDROID_KEYSTORE_PASSWORD when a keystore is supplied}"
+          : "${ANDROID_KEY_PASSWORD:?Set ANDROID_KEY_PASSWORD when a keystore is supplied}"
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/saathiya-upload-key.jks"
+          test -s "$RUNNER_TEMP/saathiya-upload-key.jks"
+          echo "KEYSTORE_PATH=$RUNNER_TEMP/saathiya-upload-key.jks" >> "$GITHUB_ENV"
+          echo "STORE_PASSWORD=$ANDROID_KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "KEY_ALIAS=${ANDROID_KEY_ALIAS:-upload}" >> "$GITHUB_ENV"
+          echo "KEY_PASSWORD=$ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
+          echo "Release APK/AAB signing is configured." >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Prepare APK artifact
+      - name: Build debug APK and release APK/AAB
+        run: gradle --no-daemon --stacktrace :app:assembleDebug :app:assembleRelease :app:bundleRelease
+
+      - name: Prepare APK and AAB artifacts
         shell: bash
         run: |
-          test -f app/build/outputs/apk/debug/app-debug.apk
-          cp app/build/outputs/apk/debug/app-debug.apk Saathiya-debug.apk
-          sha256sum Saathiya-debug.apk
+          set -euo pipefail
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          release_apk="$(find app/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)"
+          release_aab="app/build/outputs/bundle/release/app-release.aab"
+          test -n "$release_apk"
+          test -s "$release_aab"
 
-      - name: Upload APK
+          mkdir -p build-artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk build-artifacts/Saathiya-debug.apk
+
+          if [[ "$release_apk" == *unsigned* ]]; then
+            cp "$release_apk" build-artifacts/Saathiya-release-unsigned.apk
+            cp "$release_aab" build-artifacts/Saathiya-release-unsigned.aab
+            echo "Release APK/AAB are unsigned. Configure the four ANDROID_* signing secrets before uploading to Google Play." > build-artifacts/RELEASE-SIGNING.txt
+          else
+            cp "$release_apk" build-artifacts/Saathiya-release.apk
+            cp "$release_aab" build-artifacts/Saathiya-release.aab
+            echo "Release APK/AAB were signed using the configured upload keystore." > build-artifacts/RELEASE-SIGNING.txt
+          fi
+
+          sha256sum build-artifacts/*
+
+      - name: Upload Android build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Saathiya-debug-apk
-          path: Saathiya-debug.apk
+          name: Saathiya-android-builds
+          path: build-artifacts/*
           if-no-files-found: error
           retention-days: 14

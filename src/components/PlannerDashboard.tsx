@@ -97,7 +97,7 @@ export const PlannerDashboard: React.FC<PlannerDashboardProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `weddmate-report-${w.qrCodeToken}.csv`;
+    a.download = `saathiya-report-${w.qrCodeToken}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -288,7 +288,7 @@ export const PlannerDashboard: React.FC<PlannerDashboardProps> = ({
           {selectedWedding ? (
             <>
               <HeartQrCode
-                value={`weddmate://join/${selectedWedding.qrCodeToken}`}
+                value={`saathiya://join/${selectedWedding.qrCodeToken}`}
                 weddingName={selectedWedding.weddingName}
                 coupleNames={`${selectedWedding.brideName} & ${selectedWedding.groomName}`}
                 venue={selectedWedding.venue}

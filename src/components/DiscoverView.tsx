@@ -158,7 +158,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
           </h2>
           <p className="text-sm text-[#5A3F47] dark:text-[#C7B3B8] mb-6">
             Your profile stays completely private until you voluntarily opt in to Discover. You can
-            still enjoy Weddmate Memories and Reels freely.
+            still enjoy Saathiya Memories and Reels freely.
           </p>
           <button
             type="button"

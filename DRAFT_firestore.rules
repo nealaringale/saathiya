@@ -395,7 +395,7 @@ service cloud.firestore {
         );
       }
 
-      // 8. Weddmate Memories (Photos, Reels, Stories)
+      // 8. Saathiya Memories (Photos, Reels, Stories)
       match /memories/{memoryId} {
         function parentWedding() {
           return get(/databases/$(database)/documents/weddings/$(weddingId)).data;

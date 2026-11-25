@@ -309,7 +309,7 @@ export const WebsiteLanding: React.FC<WebsiteLandingProps> = ({
 
           <div className="lg:col-span-5 flex justify-center">
             <HeartQrCode
-              value="weddmate://join/DEMO-ROYAL-2026"
+              value="saathiya://join/DEMO-ROYAL-2026"
               weddingName="Royal Udaipur Celebration"
               coupleNames="Aarav & Kiara"
               venue="City Palace Courtyard, Udaipur"
@@ -393,7 +393,7 @@ export const WebsiteLanding: React.FC<WebsiteLandingProps> = ({
               features: [
                 'Up to 500 wedding guests',
                 '3–5 day configurable Heart QR expiry',
-                'Weddmate Memories albums & Reels',
+                'Saathiya Memories albums & Reels',
                 'Side-by-side engagement analytics',
               ],
             },
@@ -463,7 +463,7 @@ export const WebsiteLanding: React.FC<WebsiteLandingProps> = ({
           <Lock className="w-3.5 h-3.5 text-[#6B1D2F] dark:text-[#D4AF5A]" />
           <span>{copy.privacyNotice}</span>
         </div>
-        <div>© {new Date().getFullYear()} Weddmate · Modern Luxury Wedding Communities</div>
+        <div>© {new Date().getFullYear()} Saathiya · Modern Luxury Wedding Communities</div>
       </footer>
     </div>
   );

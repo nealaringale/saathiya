@@ -288,7 +288,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
             Separate from Matchmaking · {activeWedding?.weddingName || 'Wedding Digital Album'}
           </div>
           <h2 className="font-display text-3xl font-semibold text-[#2A151B] dark:text-[#F5EDE2]">
-            Weddmate Memories &amp; Reels
+            Saathiya Memories &amp; Reels
           </h2>
         </div>
 
@@ -566,7 +566,7 @@ export const MemoriesView: React.FC<MemoriesViewProps> = ({
                   {m.allowDownload && (
                     <a
                       href={m.mediaUrl}
-                      download={`weddmate-${m.album.toLowerCase()}-${m.id}.jpg`}
+                      download={`saathiya-${m.album.toLowerCase()}-${m.id}.jpg`}
                       className="inline-flex items-center gap-1 text-[#6B1D2F] dark:text-[#D4AF5A] hover:underline"
                     >
                       <Download className="w-3.5 h-3.5" />

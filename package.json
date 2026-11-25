@@ -1,5 +1,5 @@
 {
-  "name": "weddmate",
+  "name": "saathiya",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --port=3000 --host=0.0.0.0",
     "lint": "tsc --noEmit",
-    "lint:rules": "eslint DRAFT_firestore.rules firestore.rules"
+    "lint:rules": "eslint DRAFT_firestore.rules firestore.rules",
+    "test:rules": "npm install --no-save --package-lock=false @firebase/rules-unit-testing@4.0.1 firebase-tools@15.37.0 && firebase emulators:exec --project demo-saathiya --only firestore \"node --test --test-concurrency=1 firestore.rules.test.js\""
   },
   "dependencies": {
     "firebase": "^11.4.0",

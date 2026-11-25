@@ -470,11 +470,11 @@ export default function App() {
         reportedUid: targetUid,
         ...(activeWedding ? { weddingId: activeWedding.id } : {}),
         reason,
-        details: 'Submitted from Weddmate community safety controls',
+        details: 'Submitted from Saathiya community safety controls',
         status: 'open',
         createdAt: serverTimestamp(),
       });
-      notify('Safety report submitted. Thank you for keeping Weddmate respectful.');
+      notify('Safety report submitted. Thank you for keeping Saathiya respectful.');
     } catch (err) {
       handleFirestoreError(err, OperationType.CREATE, `reports/${repId}`);
     }
@@ -772,7 +772,7 @@ export default function App() {
           <div className="max-w-lg mx-auto py-16 text-center bg-white dark:bg-[#1E0F14] border border-[#E5D9C8] dark:border-[#3D222B] rounded-3xl p-8">
             <ShieldCheck className="w-10 h-10 mx-auto text-[#6B1D2F] dark:text-[#D4AF5A] mb-3" />
             <h2 className="font-display text-3xl font-semibold mb-2">
-              Sign In to Enter Weddmate
+              Sign In to Enter Saathiya
             </h2>
             <p className="text-sm text-[#5A3F47] dark:text-[#C7B3B8] mb-6">
               Verify via Mobile OTP, Email, or Google Sign-In to join your wedding&apos;s Heart QR
@@ -893,7 +893,7 @@ export default function App() {
 
                 <div className="lg:col-span-5 flex justify-center">
                   <HeartQrCode
-                    value={`weddmate://join/${activeWedding.qrCodeToken}`}
+                    value={`saathiya://join/${activeWedding.qrCodeToken}`}
                     weddingName={activeWedding.weddingName}
                     coupleNames={`${activeWedding.brideName} & ${activeWedding.groomName}`}
                     venue={activeWedding.venue}
@@ -926,7 +926,7 @@ export default function App() {
                       Haldi · Mehendi · Sangeet · Reception
                     </div>
                     <h3 className="font-display text-2xl font-semibold">
-                      Weddmate Memories, Reels &amp; Live Wall
+                      Saathiya Memories, Reels &amp; Live Wall
                     </h3>
                   </div>
                   <ArrowRight className="w-5 h-5 text-[#6B1D2F] dark:text-[#D4AF5A]" />

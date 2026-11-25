@@ -62,7 +62,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const ensureConsent = (): boolean => {
     if (!isOver18) {
-      setErrorMsg('You must confirm you are 18 years or older to join Weddmate.');
+      setErrorMsg('You must confirm you are 18 years or older to join Saathiya.');
       return false;
     }
     if (!acceptedTerms) {
@@ -166,7 +166,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
     setLoading(true);
     try {
-      const verifier = createPhoneRecaptcha('weddmate-recaptcha-container');
+      const verifier = createPhoneRecaptcha('saathiya-recaptcha-container');
       const result = await requestPhoneOtp(phoneNumber.trim(), verifier);
       setConfirmResult(result);
       setInfoMsg(`OTP sent via SMS to ${phoneNumber.trim()}.`);
@@ -218,7 +218,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             Private Wedding Community Access
           </div>
           <h2 className="font-display text-3xl font-semibold text-[#2A151B] dark:text-[#F5EDE2]">
-            Welcome to Weddmate
+            Welcome to Saathiya
           </h2>
         </div>
 
@@ -415,7 +415,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </button>
                   </form>
                 )}
-                <div id="weddmate-recaptcha-container" />
+                <div id="saathiya-recaptcha-container" />
               </div>
             )}
 
@@ -512,7 +512,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   className="mt-0.5 accent-[#6B1D2F]"
                 />
                 <span>
-                  I accept the Weddmate Terms &amp; Conditions and Privacy Policy (opt-in matchmaking
+                  I accept the Saathiya Terms &amp; Conditions and Privacy Policy (opt-in matchmaking
                   only).
                 </span>
               </label>

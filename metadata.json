@@ -1,5 +1,5 @@
 {
-  "name": "Weddmate",
+  "name": "Saathiya",
   "description": "Modern Luxury Indian wedding matchmaking, heart-shaped QR private communities, private chat, wedding memories & reels, and planner studio.",
   "requestFramePermissions": ["camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
